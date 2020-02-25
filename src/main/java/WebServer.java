@@ -9,6 +9,10 @@ public class WebServer {
     get("/", ((request, response) -> {
       return new ModelAndView(null, "index.hbs");
     }), new HandlebarsTemplateEngine());
+
+    get("/courses", ((request, response) -> {
+      return new ModelAndView(null, "courses.hbs");
+    }),  new HandlebarsTemplateEngine());
   }
 }
 
