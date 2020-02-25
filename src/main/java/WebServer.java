@@ -1,6 +1,7 @@
 
 import dao.CourseDao;
 import dao.InMemoryCourseDao;
+import dao.UnirestCourseDao;
 import model.Course;
 import spark.ModelAndView;
 import spark.template.handlebars.HandlebarsTemplateEngine;
@@ -13,12 +14,26 @@ import static spark.Spark.*;
 public class WebServer {
   public static void main(String[] args) {
 
-    CourseDao courseDao = new InMemoryCourseDao();
-    courseDao.add(new Course("OOSE", "jhu-oose.com"));
-    courseDao.add(new Course("Gateway", "jhu-gateway.com"));
+//    CourseDao courseDao = new InMemoryCourseDao();
+//    courseDao.add(new Course("OOSE", "jhu-oose.com"));
+//    courseDao.add(new Course("Gateway", "jhu-gateway.com"));
+
+    CourseDao courseDao = new UnirestCourseDao();
 
     get("/", ((request, response) -> {
-      return new ModelAndView(null, "index.hbs");
+      Map<String, Object> model = new HashMap<>();
+      model.put("username", request.cookie("username"));
+      return new ModelAndView(model, "index.hbs");
+    }), new HandlebarsTemplateEngine());
+
+    post("/", ((request, response) -> {
+      // TODO Capture client's username
+      String username = request.queryParams("username");
+      // TODO store that username
+      response.cookie("username", username);
+      // TODO refresh homepage
+      response.redirect("/");
+      return null;
     }), new HandlebarsTemplateEngine());
 
     get("/courses", ((request, response) -> {

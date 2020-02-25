@@ -10,6 +10,17 @@
 <body>
     <h1>Welcome to CourseReVU App</h1>
 
+    {{#if username}}
+        <p>You are signed in as {{ username }}</p>
+    {{else}}
+        <form action="/" method="post">
+            <input type="text" placeholder="username" name="username">
+            <button>sign in</button>
+        </form>
+    {{/if}}
+
+
+
     <p>View <a href="/courses">Courses</a></p>
 </body>
 </html>

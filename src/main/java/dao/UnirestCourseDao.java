@@ -7,6 +7,8 @@ import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import model.Course;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,12 +25,24 @@ public class UnirestCourseDao implements CourseDao {
     try {
       Unirest.post(URL).body(gson.toJson(course)).asJson();
     } catch (UnirestException e) {
+      // TODO error
       e.printStackTrace();
     }
   }
 
   @Override
   public List<Course> findAll() {
+    final String URL = BASE_URL + "courses";
+    HttpResponse<JsonNode> jsonResponse = null;
+    try {
+      jsonResponse = Unirest.get(URL).asJson();
+      Course[] courses = gson.fromJson(jsonResponse.getBody().toString(), Course[].class);
+      return new ArrayList<>(Arrays.asList(courses));
+    } catch (UnirestException e) {
+      // TODO Error
+      e.printStackTrace();
+    }
+
     return null;
   }
 }
