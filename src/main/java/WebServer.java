@@ -26,6 +26,17 @@ public class WebServer {
       model.put("courseList", courseDao.findAll());
       return new ModelAndView(model, "courses.hbs");
     }),  new HandlebarsTemplateEngine());
+
+    post("/courses", ((request, response) -> {
+      // TODO Capture client's input
+      String name = request.queryParams("coursename");
+      String url = request.queryParams("courseurl");
+      // TODO create (and add) a course
+      courseDao.add(new Course(name, url));
+      // TODO refresh courses page to show the new addition
+      response.redirect("/courses");
+      return null;
+    }), new HandlebarsTemplateEngine());
   }
 }
 
